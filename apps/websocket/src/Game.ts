@@ -22,7 +22,7 @@ export class Game {
       from: string;
       to: string;
       promotion?: string;
-    }
+    },
   ) {
     if (this.board.turn() === "w" && socket !== this.player1) {
       console.log("exit from here");
@@ -61,6 +61,10 @@ export class Game {
   }
   startGame(): void {
     this.startTime = new Date();
+  }
+  close(): void {
+    this.player1.close();
+    this.player2.close();
   }
 
   endGame(): void {

@@ -21,6 +21,16 @@ export class GameManager {
 
   removeUser(user: WebSocket): void {
     this.users = this.users.filter((u) => u !== user);
+    this.games = this.games.filter((game) => {
+      if (game.player1 === user || game.player2 === user) {
+        game.close();
+        return false;
+      }
+      return true;
+    });
+    if (this.waitingPlayer === user) {
+      this.waitingPlayer = null;
+    }
   }
 
   gameHandler(ws: WebSocket) {

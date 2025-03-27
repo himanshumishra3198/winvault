@@ -9,5 +9,10 @@ const gameManager = new GameManager();
 wss.on("connection", (ws: WebSocket) => {
   gameManager.addUser(ws);
 
-  ws.send("Hello, I am a WebSocket server");
+  ws.send(
+    JSON.stringify({ type: "CONNECTED", message: "Connected to server" }),
+  );
+  ws.onclose = () => {
+    gameManager.removeUser(ws);
+  };
 });
