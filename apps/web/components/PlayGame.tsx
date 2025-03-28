@@ -1,6 +1,6 @@
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GAME_OVER, MOVE } from "@repo/common/constants";
 interface PlayGameProps {
   socket: WebSocket;
@@ -8,7 +8,8 @@ interface PlayGameProps {
 }
 
 export function PlayGame({ socket, color }: PlayGameProps) {
-  const [game, setGame] = useState(new Chess());
+  const game = useMemo(() => new Chess(), []);
+  const [fen, setFen] = useState(game.fen());
 
   useEffect(() => {
     socket.onmessage = (event) => {
@@ -28,13 +29,20 @@ export function PlayGame({ socket, color }: PlayGameProps) {
   }, [socket]);
 
   function makeAMove(move: { from: string; to: string; promotion: string }) {
-    const gameCopy = new Chess(game.fen());
-    const result = gameCopy.move(move);
-    setGame(gameCopy);
+    let result;
+    try {
+      console.log(move);
+      result = game.move(move);
+      setFen(game.fen());
+    } catch (error: any) {
+      console.log(error.message);
+      console.log("Invalid move", error);
+    }
     return result;
   }
 
   function onDrop(sourceSquare: string, targetSquare: string) {
+    console.log(`Dropped: ${sourceSquare} to ${targetSquare}`);
     const move = makeAMove({
       from: sourceSquare,
       to: targetSquare,
@@ -54,7 +62,7 @@ export function PlayGame({ socket, color }: PlayGameProps) {
       <h1>Play Game</h1>
       <h2>Color: {color}</h2>
       <div>
-        <Chessboard position={game.fen()} onPieceDrop={onDrop} />;
+        <Chessboard position={fen} onPieceDrop={onDrop} />;
       </div>
     </div>
   );

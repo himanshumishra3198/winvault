@@ -25,39 +25,44 @@ export class Game {
     },
   ) {
     if (this.board.turn() === "w" && socket !== this.player1) {
-      console.log("exit from here");
+      console.log("Invalid move: It's white's turn.");
       return;
     }
     if (this.board.turn() === "b" && socket !== this.player2) {
-      console.log("exit from here2");
+      console.log("Invalid move: It's black's turn.");
       return;
     }
     try {
-      this.board.move({ from: move.from, to: move.to });
+      const moveResult = this.board.move({
+        from: move.from,
+        to: move.to,
+        promotion: move.promotion,
+      });
+      if (!moveResult) {
+        console.log("Invalid move: Move could not be executed.");
+        return;
+      }
     } catch (e) {
-      console.log(e);
+      console.error("Error executing move:", e);
       return;
     }
 
     if (this.board.isGameOver()) {
-      // this.endGame();
       const result = this.board.isCheckmate()
-        ? JSON.stringify({
+        ? {
             state: "checkmate",
             winner: this.board.turn() === "w" ? "black" : "white",
-          })
-        : JSON.stringify({ state: "draw" });
+          }
+        : { state: "draw" };
 
       this.player1.send(JSON.stringify({ type: GAME_OVER, result }));
       this.player2.send(JSON.stringify({ type: GAME_OVER, result }));
-      console.log("Game Over");
+      console.log("Game Over:", result);
       return;
     }
-    if (this.board.turn() === "w") {
-      this.player1.send(JSON.stringify({ type: MOVE, move }));
-    } else {
-      this.player2.send(JSON.stringify({ type: MOVE, move }));
-    }
+
+    const opponent = this.board.turn() === "w" ? this.player1 : this.player2;
+    opponent.send(JSON.stringify({ type: MOVE, move }));
   }
   startGame(): void {
     this.startTime = new Date();
