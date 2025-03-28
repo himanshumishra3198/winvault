@@ -1,5 +1,5 @@
 import { Chessboard } from "react-chessboard";
-import { Chess } from "chess.js";
+import { Chess, Square } from "chess.js";
 import { useEffect, useMemo, useState } from "react";
 import { GAME_OVER, MOVE } from "@repo/common/constants";
 interface PlayGameProps {
@@ -15,8 +15,19 @@ export function PlayGame({ socket, color }: PlayGameProps) {
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data.type === MOVE) {
-        const move = data.move;
-        makeAMove(move);
+        try {
+          console.log(data.move);
+          const move = data.move;
+          game.move({
+            from: move.from,
+            to: move.to,
+            promotion: move.promotion,
+          });
+
+          setFen(game.fen());
+        } catch (e) {
+          console.log(e);
+        }
       }
       if (data.type === GAME_OVER) {
         console.log(data.result);
@@ -31,12 +42,17 @@ export function PlayGame({ socket, color }: PlayGameProps) {
   function makeAMove(move: { from: string; to: string; promotion: string }) {
     let result;
     try {
+      const piece = game.get(move.from as Square);
+      if (!piece || piece.color !== color[0]) {
+        return false;
+      }
       console.log(move);
       result = game.move(move);
       setFen(game.fen());
     } catch (error: any) {
       console.log(error.message);
       console.log("Invalid move", error);
+      return false;
     }
     return result;
   }
