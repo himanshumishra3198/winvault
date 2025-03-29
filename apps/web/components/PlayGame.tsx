@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { GAME_OVER, MOVE } from "@repo/common/constants";
 interface PlayGameProps {
   socket: WebSocket;
-  color: string;
+  color: "white" | "black";
 }
 
 export function PlayGame({ socket, color }: PlayGameProps) {
@@ -46,7 +46,6 @@ export function PlayGame({ socket, color }: PlayGameProps) {
       if (!piece || piece.color !== color[0]) {
         return false;
       }
-      console.log(move);
       result = game.move(move);
       setFen(game.fen());
     } catch (error: any) {
@@ -78,7 +77,13 @@ export function PlayGame({ socket, color }: PlayGameProps) {
       <h1>Play Game</h1>
       <h2>Color: {color}</h2>
       <div>
-        <Chessboard position={fen} onPieceDrop={onDrop} />;
+        <Chessboard
+          position={fen}
+          onPieceDrop={onDrop}
+          boardWidth={380}
+          boardOrientation={color}
+        />
+        ;
       </div>
     </div>
   );
