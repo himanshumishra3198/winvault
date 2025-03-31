@@ -33,6 +33,10 @@
   animation: pulse 2s infinite;
 }
 
+.animate-pulse-slow {
+  animation: pulse 3s infinite;
+}
+
 .delay-100 {
   animation-delay: 0.3s;
 }

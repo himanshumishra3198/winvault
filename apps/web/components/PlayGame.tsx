@@ -3,7 +3,7 @@
 import { Chessboard } from "react-chessboard";
 import { Chess, type Square } from "chess.js";
 import { useEffect, useMemo, useState } from "react";
-import { GAME_OVER, MOVE } from "@repo/common/constants";
+import { CHECKMATE, DRAW, GAME_OVER, MOVE } from "@repo/common/constants";
 import ChessMoves from "./ChessMoves";
 import ChessTimer from "./ChessTimer";
 import GameVictory from "./GameVictory";
@@ -48,10 +48,10 @@ export function PlayGame({ socket, color }: PlayGameProps) {
       }
       if (data.type === GAME_OVER) {
         console.log(data.result);
-        setGameStatus(data.result);
+        setGameStatus(data.result.state);
 
         // Determine result based on data
-        if (data.result.includes("White wins")) {
+        if (data.result.state === CHECKMATE && data.result.winner === "white") {
           const playerWon = color === "white";
           if (playerWon) {
             setWinner("white");
@@ -59,7 +59,10 @@ export function PlayGame({ socket, color }: PlayGameProps) {
           } else {
             setShowLoss(true);
           }
-        } else if (data.result.includes("Black wins")) {
+        } else if (
+          data.result.state === CHECKMATE &&
+          data.result.winner === "black"
+        ) {
           const playerWon = color === "black";
           if (playerWon) {
             setWinner("black");
@@ -67,7 +70,7 @@ export function PlayGame({ socket, color }: PlayGameProps) {
           } else {
             setShowLoss(true);
           }
-        } else if (data.result.includes("Draw")) {
+        } else if (data.result.state === DRAW) {
           setShowDraw(true);
         }
       }
@@ -141,20 +144,6 @@ export function PlayGame({ socket, color }: PlayGameProps) {
     }
   }
 
-  // For demo purposes - functions to trigger different result animations
-  const triggerVictory = (winnerColor: "white" | "black") => {
-    setWinner(winnerColor);
-    setShowVictory(true);
-  };
-
-  const triggerLoss = () => {
-    setShowLoss(true);
-  };
-
-  const triggerDraw = () => {
-    setShowDraw(true);
-  };
-
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-[#E9FFD1] to-[#FFFAC0] p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
@@ -193,28 +182,6 @@ export function PlayGame({ socket, color }: PlayGameProps) {
           </div>
         )}
 
-        {/* Demo buttons (for testing result animations) */}
-        <div className="text-center mb-6">
-          <button
-            onClick={() => triggerVictory(color)}
-            className="px-4 py-2 bg-white text-[#558B2F] rounded-lg border border-[#8BC34A] mr-4 hover:bg-[#F9FBE7]"
-          >
-            Demo: Victory
-          </button>
-          <button
-            onClick={triggerLoss}
-            className="px-4 py-2 bg-[#33691E] text-white rounded-lg border border-[#8BC34A] mr-4 hover:bg-[#558B2F]"
-          >
-            Demo: Loss
-          </button>
-          <button
-            onClick={triggerDraw}
-            className="px-4 py-2 bg-[#CDDC39] text-[#33691E] rounded-lg border border-[#8BC34A] hover:bg-[#DCEDC8]"
-          >
-            Demo: Draw
-          </button>
-        </div>
-
         {/* Game Content */}
         <div className="flex flex-col lg:flex-row items-center justify-center gap-8 mt-4">
           {/* Left Column - Timer and Chessboard */}
@@ -248,7 +215,7 @@ export function PlayGame({ socket, color }: PlayGameProps) {
           </div>
 
           {/* Right Column - Moves Container */}
-          <div className="w-full md:w-auto">
+          <div className="container ">
             <ChessMoves moves={game.history()} title="Battle Moves" />
           </div>
         </div>

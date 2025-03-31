@@ -4,7 +4,7 @@ import { INIT_GAME } from "@repo/common/constants";
 import { PlayGame } from "~/components/PlayGame";
 export default function game() {
   const [socket, setSocket] = useState<WebSocket | null>(null);
-  const [color, setColor] = useState<string>("");
+  const [color, setColor] = useState<"white" | "black">("white");
   const [renderBoard, setRenderBoard] = useState<boolean>(false);
   useEffect(() => {
     const wss = new WebSocket("ws://localhost:8081");
