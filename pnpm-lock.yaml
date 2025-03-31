@@ -66,12 +66,21 @@ importers:
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@types/canvas-confetti':
+        specifier: ^1.9.0
+        version: 1.9.0
       '@types/chess.js':
         specifier: ^0.13.7
         version: 0.13.7
+      canvas-confetti:
+        specifier: ^1.6.0
+        version: 1.9.3
       chess.js:
         specifier: ^1.1.0
         version: 1.1.0
+      lucide-react:
+        specifier: ^0.485.0
+        version: 0.485.0(react@18.3.1)
       next:
         specifier: 14.2.8
         version: 14.2.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -549,6 +558,9 @@ packages:
   '@swc/helpers@0.5.5':
     resolution: {integrity: sha512-KGYxvIOXcceOAbEk4bi/dVLEK9z8sZ0uBB3Il5b1rhfClSpcX0yfRO0KmTkqR2cnQDymwLB+25ZyMzICg/cm/A==}
 
+  '@types/canvas-confetti@1.9.0':
+    resolution: {integrity: sha512-aBGj/dULrimR1XDZLtG9JwxX1b4HPRF6CX9Yfwh3NvstZEm1ZL7RBnel4keCPSqs1ANRu1u2Aoz9R+VmtjYuTg==}
+
   '@types/chess.js@0.13.7':
     resolution: {integrity: sha512-o9TeeBdFXelFJXOD9+6sT6bbpBvWG0ZbpOnlIyUNXBjewh7xoFS0+BifGc71T45D5E952io3i8dDsaN6hnLaxw==}
 
@@ -868,6 +880,9 @@ packages:
 
   caniuse-lite@1.0.30001636:
     resolution: {integrity: sha512-bMg2vmr8XBsbL6Lr0UHXy/21m84FTxDLWn2FSqMd5PrlbMxwJlQnC2YWYxVgp66PZE+BBNF2jYQUBKCo1FDeZg==}
+
+  canvas-confetti@1.9.3:
+    resolution: {integrity: sha512-rFfTURMvmVEX1gyXFgn5QMn81bYk70qa0HLzcIOSVEyl57n6o9ItHeBtUSWdvKAPY0xlvBHno4/v3QPrT83q9g==}
 
   chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -1767,6 +1782,11 @@ packages:
     resolution: {integrity: sha512-OwQ3uljZLp2cerj8sboy5rnhtGTCl9UCJIhT1J85/yOuGVlEH+xaUPR7tvNdddPvmV5M5VLdr7cQuWE3hzA4jw==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc
+
+  lucide-react@0.485.0:
+    resolution: {integrity: sha512-NvyQJ0LKyyCxL23nPKESlr/jmz8r7fJO1bkuptSNYSy0s8VVj4ojhX0YAgmE1e0ewfxUZjIlZpvH+otfTnla8Q==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
@@ -2942,6 +2962,8 @@ snapshots:
       '@swc/counter': 0.1.3
       tslib: 2.6.2
 
+  '@types/canvas-confetti@1.9.0': {}
+
   '@types/chess.js@0.13.7': {}
 
   '@types/eslint@8.56.2':
@@ -3355,6 +3377,8 @@ snapshots:
   camelcase-css@2.0.1: {}
 
   caniuse-lite@1.0.30001636: {}
+
+  canvas-confetti@1.9.3: {}
 
   chalk@2.4.2:
     dependencies:
@@ -4425,6 +4449,10 @@ snapshots:
       yallist: 4.0.0
 
   lucide-react@0.451.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+
+  lucide-react@0.485.0(react@18.3.1):
     dependencies:
       react: 18.3.1
 

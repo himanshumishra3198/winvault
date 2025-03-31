@@ -1,6 +1,12 @@
 import { Chess } from "chess.js";
 import WebSocket from "ws";
-import { GAME_OVER, INIT_GAME, MOVE } from "@repo/common/constants";
+import {
+  GAME_OVER,
+  INIT_GAME,
+  MOVE,
+  CHECKMATE,
+  DRAW,
+} from "@repo/common/constants";
 export class Game {
   player1: WebSocket;
   player2: WebSocket;
@@ -50,10 +56,10 @@ export class Game {
     if (this.board.isGameOver()) {
       const result = this.board.isCheckmate()
         ? {
-            state: "checkmate",
+            state: CHECKMATE,
             winner: this.board.turn() === "w" ? "black" : "white",
           }
-        : { state: "draw" };
+        : { state: DRAW };
 
       this.player1.send(JSON.stringify({ type: GAME_OVER, result }));
       this.player2.send(JSON.stringify({ type: GAME_OVER, result }));
